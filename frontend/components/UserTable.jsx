@@ -1,6 +1,7 @@
 "use client";
 
 import { Pencil, Trash2 } from "lucide-react";
+import { formatLabel } from "@/utils/formatLabel";
 
 export default function UserTable({ users, onEdit, onDelete }) {
   return (
@@ -45,7 +46,7 @@ export default function UserTable({ users, onEdit, onDelete }) {
 
                   <div className="flex flex-col leading-[1.1]">
                     <span className="font-semibold">{u.name}</span>
-                    <span className="text-gray-500 text-xs tracking-wide">{u.role}</span>
+                    <span className="text-gray-500 text-xs tracking-wide">{formatLabel(u.role)}</span>
                   </div>
                 </div>
               </td>
@@ -68,7 +69,7 @@ export default function UserTable({ users, onEdit, onDelete }) {
               </td>
 
               {/* TYPE */}
-              <td className="p-3">{u.employmentType}</td>
+              <td className="p-3">{formatLabel(u.employmentType)}</td>
 
               {/* ACTIONS */}
               <td className="p-3 text-center">

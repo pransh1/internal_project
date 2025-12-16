@@ -40,38 +40,48 @@ export default function AdminRegister() {
 
         {/* Name */}
         <input
-          type="text"
-          className="border w-full p-3 mb-4 rounded focus:ring-2 focus:ring-blue-500"
-          placeholder="Full Name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+  type="text"
+  placeholder="Full Name"
+  value={name}
+  onChange={(e) => setName(e.target.value)}
+  className="w-full border border-gray-300 rounded-lg px-4 py-3
+             focus:ring-2 focus:ring-blue-500 transition mb-4"
+/>
 
         {/* Email */}
         <input
-          type="email"
-          className="border w-full p-3 mb-4 rounded focus:ring-2 focus:ring-blue-500"
-          placeholder="Email address"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+  type="email"
+  placeholder="Email address"
+  value={email}
+  onChange={(e) => setEmail(e.target.value)}
+  className="w-full border border-gray-300 rounded-lg px-4 py-3
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition mb-4"
+/>
+
 
         {/* Password */}
         <input
-          type="password"
-          className="border w-full p-3 mb-4 rounded focus:ring-2 focus:ring-blue-500"
-          placeholder="Password"
-          value={pwd}
-          onChange={(e) => setPwd(e.target.value)}
-        />
+  type="password"
+  placeholder="Password"
+  value={pwd}
+  onChange={(e) => setPwd(e.target.value)}
+  className="w-full border border-gray-300 rounded-lg px-4 py-3
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition mb-4"
+/>
 
         {/* Register Button */}
-        <button
-          className="w-full bg-blue-600 text-white py-3 rounded font-semibold hover:bg-blue-700 transition"
-          onClick={register}
-        >
-          Register
-        </button>
+        <div className="flex justify-center mt-6">
+  <button
+    onClick={register}
+    className="w-[260px] bg-blue-600 text-white py-3 rounded-lg
+               font-semibold text-base
+               hover:bg-blue-700 transition"
+  >
+    Register
+  </button>
+</div>
 
         <p className="text-center mt-4 text-sm">
           Already have an account?{" "}

@@ -54,28 +54,36 @@ export default function AdminLogin() {
         {/* Email */}
         <input
           type="email"
-          className="border w-full p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Email address"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-3
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition mb-4"
         />
 
         {/* Password */}
         <input
           type="password"
-          className="border w-full p-3 mb-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Password"
           value={pwd}
           onChange={(e) => setPwd(e.target.value)}
+          className="w-full border border-gray-300 rounded-lg px-4 py-3
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition mb-4"
         />
 
         {/* Login Button */}
-        <button
-          className="w-full bg-blue-600 text-white py-3 rounded font-semibold hover:bg-blue-700 transition"
-          onClick={login}
-        >
-          Login
-        </button>
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={login}
+            className="w-[260px] bg-blue-600 text-white py-3 rounded-lg
+               font-semibold text-base
+               hover:bg-blue-700 transition"
+          >
+            Login
+          </button>
+        </div>
 
         {/* Forgot + Register */}
         <div className="text-center mt-4 text-sm">
@@ -109,17 +117,33 @@ export default function AdminLogin() {
             <input
               type="email"
               placeholder="Enter your registered email"
-              className="border w-full p-3 rounded mb-4"
               value={forgotEmail}
               onChange={(e) => setForgotEmail(e.target.value)}
+              className="w-full border border-gray-300 rounded-lg px-4 py-3
+             focus:outline-none focus:ring-2 focus:ring-blue-500
+             transition mb-4"
             />
 
             <button
               onClick={sendResetLink}
-              className="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-700 transition"
+              className="
+    w-[85%]
+    mx-auto
+    block
+    bg-blue-600 text-white
+    py-3
+    rounded-xl
+    font-semibold
+    text-base
+    tracking-wide
+    hover:bg-blue-700
+    active:scale-[0.98]
+    transition-all
+  "
             >
               Send Reset Link
             </button>
+
 
             <p
               className="text-center mt-4 cursor-pointer text-gray-600 hover:underline"

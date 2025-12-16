@@ -53,7 +53,7 @@ export default function ResetPasswordPage() {
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
       <div className="bg-white p-10 w-96 rounded-lg shadow-lg border">
-        
+
         <h2 className="text-2xl font-bold text-center mb-6">
           Reset Password
         </h2>
@@ -62,11 +62,12 @@ export default function ResetPasswordPage() {
         <input
           type="password"
           placeholder="New password"
-          className={`border w-full p-3 rounded mb-1 focus:ring-2 ${
-            errorPassword ? "border-red-500" : "focus:ring-blue-500"
-          }`}
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className={`w-full border rounded-lg px-4 py-3 mb-3
+    focus:outline-none focus:ring-2 transition
+    ${errorPassword ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-500"}
+  `}
         />
         {errorPassword && (
           <p className="text-red-500 text-xs mb-3">{errorPassword}</p>
@@ -76,11 +77,12 @@ export default function ResetPasswordPage() {
         <input
           type="password"
           placeholder="Confirm password"
-          className={`border w-full p-3 rounded mb-1 focus:ring-2 ${
-            errorConfirm ? "border-red-500" : "focus:ring-blue-500"
-          }`}
           value={confirm}
           onChange={(e) => setConfirm(e.target.value)}
+          className={`w-full border rounded-lg px-4 py-3
+    focus:outline-none focus:ring-2 transition
+    ${errorConfirm ? "border-red-500 focus:ring-red-400" : "border-gray-300 focus:ring-blue-500"}
+  `}
         />
         {errorConfirm && (
           <p className="text-red-500 text-xs mb-3">{errorConfirm}</p>
@@ -93,12 +95,16 @@ export default function ResetPasswordPage() {
           </p>
         )}
 
-        <button
-          onClick={submitNewPassword}
-          className="w-full bg-blue-600 text-white p-3 rounded font-semibold hover:bg-blue-700 transition mt-2"
-        >
-          Change Password
-        </button>
+        <div className="flex justify-center mt-6">
+          <button
+            onClick={submitNewPassword}
+            className="w-[260px] bg-blue-600 text-white py-3 rounded-lg
+               font-semibold text-base
+               hover:bg-blue-700 transition"
+          >
+            Change Password
+          </button>
+        </div>
 
         <p className="mt-4 text-center text-sm">
           Back to{" "}
