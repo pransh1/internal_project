@@ -3,7 +3,7 @@ import {
   registerAdmin,
   loginAdmin,
   forgetPassword,
-  resetPassword,
+  resetPassword
 } from "../controllers/admin.controller.js";
 
 const router = express.Router();

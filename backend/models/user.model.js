@@ -7,41 +7,19 @@ import {
 } from "../constants.js";
 
 const userSchema = new mongoose.Schema({
-  employeeId: {
-    type: String,
-    required: true,
-  },
+  employeeId: { type: String, required: true },
 
-  name: {
-    type: String,
-    required: true,
-  },
+  name: { type: String, required: true },
 
-  email: {
-    type: String,
-    required: true,
-    unique: true
-  },
+  email: { type: String, required: true, unique: true },
 
-  password: {
-    type: String,
-    required: true
-  },
+  password: { type: String, required: true },
 
-  profilePic: {
-    type: String,
-    default: "" 
-  },
+  profilePic: { type: String, default: "" },
 
-  dob: {
-    type: Date,
-    required: true
-  },
+  dob: { type: Date, required: true },
 
-  joiningDate: {
-    type: Date,
-    required: true
-  },
+  joiningDate: { type: Date, required: true },
 
   role: {
     type: String,
@@ -67,20 +45,19 @@ const userSchema = new mongoose.Schema({
     required: true
   },
 
-  address: {
-    type: String,
-    required: true
-  },
+  address: { type: String, required: true },
 
-  phone: {
-    type: String,
-    required: true
-  },
+  phone: { type: String, required: true },
 
-  createdAt: {
-    type: Date,
-    default: Date.now
-  }
+  avatarInitial: {
+    type: String,
+    default: ""
+  },
+  avatarColor: {
+    type: String,
+    default: ""
+  },
+  createdAt: { type: Date, default: Date.now }
 });
 
 export default mongoose.model("User", userSchema);

@@ -4,7 +4,10 @@ import { upload } from "../middleware/upload.middleware.js";
 import {
   createUser,
   uploadUserProfilePic,
-  userLogin
+  listUsers,
+  editUser,
+  deleteUser,
+  getUserById
 } from "../controllers/user.controller.js";
 
 const router = express.Router();
@@ -12,10 +15,20 @@ const router = express.Router();
 // Admin creates new user
 router.post("/create", auth, createUser);
 
-// Admin uploads user profile picture
-router.post("/upload-profile-pic/:id",auth,upload.single("photo"),uploadUserProfilePic);
+router.get("/list", auth, listUsers);
 
-// User Login (open route)
-router.post("/login", userLogin);
+router.put("/:id", auth, editUser);
+
+router.delete("/:id", auth, deleteUser);
+
+// UPLOAD PROFILE PIC (admin only)
+router.post(
+  "/upload-profile-pic/:id",
+  auth,
+  upload.single("photo"),
+  uploadUserProfilePic
+);
+
+router.get("/:id", auth, getUserById);
 
 export default router;
