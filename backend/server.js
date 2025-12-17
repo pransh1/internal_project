@@ -1,5 +1,6 @@
 import express from "express";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
 import cors from "cors";
 import connectDB from "./db/connect.js";
 import adminRoutes from "./routes/admin.route.js";
@@ -9,24 +10,27 @@ dotenv.config();
 
 const app = express();
 
-// Enable CORS across API
-app.use(cors());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL,
+    credentials: true,
+  })
+);
 
-// Parse JSON and form-data
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser());
 
-// Database connection
 connectDB();
 
-// PORT 
-const PORT = process.env.PORT || 3000;
+app.get("/", (req, res) => {
+  res.send("Server running successfully");
+});
 
-app.get("/", (req, res) => res.send("Server running successfully"));
-
-// route 
 app.use("/api/admin", adminRoutes);
 app.use("/api/user", userRoutes);
 
-// Start server
-app.listen(PORT, () => console.log(`Server running on PORT ${PORT}`));
+const PORT = process.env.PORT || 4000;
+app.listen(PORT, () => {
+  console.log(`Server running on PORT ${PORT}`);
+});

@@ -1,15 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-
-import { HiOutlineHome, HiOutlineUsers, HiOutlineLogout } from "react-icons/hi";
+import {
+  HiOutlineHome,
+  HiOutlineUsers,
+  HiOutlineLogout,
+} from "react-icons/hi";
 
 export default function Sidebar() {
   const [expanded, setExpanded] = useState(false);
+  const [admin, setAdmin] = useState(null);
+
   const pathname = usePathname();
   const router = useRouter();
+
+  useEffect(() => {
+    const saved = localStorage.getItem("adminData");
+    if (saved) setAdmin(JSON.parse(saved));
+  }, []);
 
   const menu = [
     { name: "Dashboard", icon: HiOutlineHome, href: "/admin/dashboard" },
@@ -24,20 +34,41 @@ export default function Sidebar() {
 
   return (
     <div
-      className={`h-screen bg-blue-900 text-white transition-all duration-300 
-        ${expanded ? "w-60" : "w-20"}
-        flex flex-col fixed left-0 top-0 shadow-xl z-50`}
+      className={`
+        h-screen bg-blue-900 text-white fixed left-0 top-0 z-50
+        flex flex-col shadow-2xl
+        transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+        ${expanded ? "w-64" : "w-20"}
+      `}
       onMouseEnter={() => setExpanded(true)}
       onMouseLeave={() => setExpanded(false)}
     >
-      {/* Logo */}
+      {/* ================= HEADER ================= */}
       <div className="flex items-center gap-3 p-5">
-        <div className="bg-white/20 p-2 rounded-lg text-xl">🚀</div>
-        {expanded && <h1 className="text-lg font-semibold">Admin</h1>}
+        <img
+          src={admin?.profilePic || "/admin-avatar.png"}
+          className="w-10 h-10 rounded-full object-cover border-2 border-white/30"
+          alt="Admin"
+        />
+
+        <div
+          className={`
+            overflow-hidden
+            transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+            ${expanded ? "opacity-100 translate-x-0" : "opacity-0 -translate-x-3"}
+          `}
+        >
+          <p className="text-sm font-semibold whitespace-nowrap">
+            {admin?.name || "Admin"}
+          </p>
+          <p className="text-xs text-blue-200 whitespace-nowrap">
+            {admin?.email}
+          </p>
+        </div>
       </div>
 
-      {/* Nav Items */}
-      <nav className="mt-6 flex flex-col gap-2">
+      {/* ================= NAV ITEMS ================= */}
+      <nav className="mt-6 flex flex-col gap-1 px-2">
         {menu.map((item, index) => {
           const Icon = item.icon;
           const active = pathname.startsWith(item.href);
@@ -46,26 +77,75 @@ export default function Sidebar() {
             <Link
               key={index}
               href={item.href}
-              className={`flex items-center gap-4 p-4 rounded-md cursor-pointer transition 
-                ${active ? "bg-blue-700" : "hover:bg-blue-800"}
+              className={`
+                group flex items-center gap-4
+                px-4 py-3 rounded-xl
+                transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+                ${active
+                  ? "bg-blue-700 shadow-md"
+                  : "hover:bg-blue-800"}
               `}
             >
-              <Icon size={24} />
-              {expanded && <span className="text-sm">{item.name}</span>}
+              {/* ICON */}
+              <div
+                className="
+                  w-8 h-8 flex items-center justify-center
+                  transition-transform duration-400 ease-out
+                  group-hover:scale-110
+                "
+              >
+                <Icon size={22} />
+              </div>
+
+              {/* TEXT */}
+              <span
+                className={`
+                  text-sm font-medium whitespace-nowrap
+                  transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+                  ${expanded
+                    ? "opacity-100 translate-x-0"
+                    : "opacity-0 -translate-x-3"}
+                `}
+              >
+                {item.name}
+              </span>
             </Link>
           );
         })}
       </nav>
 
-      {/* Bottom Logout Button */}
-      <div className="mt-auto p-5">
+      {/* ================= LOGOUT ================= */}
+      <div className="mt-auto px-2 pb-4">
         <button
           onClick={logout}
-          className={`flex items-center gap-4 p-4 rounded-md w-full text-left transition
-             hover:bg-blue-800`}
+          className="
+            group flex items-center gap-4 w-full
+            px-4 py-3 rounded-xl
+            transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+            hover:bg-blue-800
+          "
         >
-          <HiOutlineLogout size={24} />
-          {expanded && <span className="text-sm">Logout</span>}
+          <div
+            className="
+              w-8 h-8 flex items-center justify-center
+              transition-transform duration-400 ease-out
+              group-hover:scale-110
+            "
+          >
+            <HiOutlineLogout size={22} />
+          </div>
+
+          <span
+            className={`
+              text-sm font-medium whitespace-nowrap
+              transition-all duration-500 ease-[cubic-bezier(0.4,0,0.2,1)]
+              ${expanded
+                ? "opacity-100 translate-x-0"
+                : "opacity-0 -translate-x-3"}
+            `}
+          >
+            Logout
+          </span>
         </button>
       </div>
     </div>
