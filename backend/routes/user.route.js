@@ -7,6 +7,8 @@ import {
   listUsers,
   editUser,
   deleteUser,
+  restoreUser,
+  listDeletedUsers,
   getUserById
 } from "../controllers/user.controller.js";
 
@@ -28,6 +30,10 @@ router.post(
   upload.single("photo"),
   uploadUserProfilePic
 );
+
+router.put("/restore/:id", auth, restoreUser);
+router.get("/deleted", auth, listDeletedUsers);
+
 
 router.get("/:id", auth, getUserById);
 

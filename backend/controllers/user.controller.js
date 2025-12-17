@@ -95,9 +95,11 @@ export const createUser = async (req, res) => {
       phone,
       profilePic: profilePicUrl,
       avatarInitial: firstLetter,
-      avatarColor: bg
+      avatarColor: bg,
+      isDeleted: false
     });
 
+  
     // email credentials
     await sendMail(
       email,
@@ -152,7 +154,7 @@ export const uploadUserProfilePic = async (req, res) => {
  */
 export const listUsers = async (req, res) => {
   try {
-    const users = await User.find().sort({ createdAt: -1 });
+    const users = await User.find({ isDeleted: false }).sort({ createdAt: -1 });
     return res.json(users);
   } catch (err) {
     return res.status(500).json({ message: err.message });
@@ -182,7 +184,10 @@ export const deleteUser = async (req, res) => {
   try {
     const userId = req.params.id;
 
-    const deleted = await User.findByIdAndDelete(userId);
+    const deleted = await User.findByIdAndUpdate(userId,
+      {isDeleted: true},
+      {new: true},
+    );
 
     if (!deleted) {
       return res.status(404).json({ message: "User not found" });
@@ -193,6 +198,36 @@ export const deleteUser = async (req, res) => {
     return res.status(500).json({ message: "Delete failed", error: err.message });
   }
 };
+
+export const restoreUser = async (req, res) => {
+  try {
+    const userId = req.params.id;
+    const restored = await User.findByIdAndUpdate(userId, 
+      {isDeleted: false},
+      {new: true}
+    );
+
+    if(!restored) {
+      return res.status(404).json({message: "User not found"});
+    };
+
+    return res.status(200).json({message: "User restored"});
+  } catch (error) {
+    return res.status(500).json({ message: error.message });
+  }
+}
+
+export const listDeletedUsers = async (req, res) => {
+  try {
+    const users = await User.find({ isDeleted: true })
+      .sort({ updatedAt: -1 });
+
+    return res.json(users);
+  } catch (err) {
+    return res.status(500).json({ message: err.message });
+  }
+};
+
 
 export const getUserById = async (req, res) => {
   try {

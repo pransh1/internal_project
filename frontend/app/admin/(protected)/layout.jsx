@@ -2,25 +2,29 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import api from "@/utils/axios";
 import Sidebar from "@/components/Sidebar";
 import AdminHeader from "@/components/AdminHeader";
 
 export default function ProtectedLayout({ children }) {
   const router = useRouter();
-  const [ready, setReady] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const token = localStorage.getItem("admintoken");
+    const checkAuth = async () => {
+      try {
+        // ✅ VERIFY COOKIE WITH BACKEND
+        await api.get("/admin/me");
+        setLoading(false);
+      } catch {
+        router.replace("/admin/login");
+      }
+    };
 
-    if (!token) {
-      router.replace("/admin/login");
-      return;
-    }
-
-    setReady(true);
+    checkAuth();
   }, [router]);
 
-  if (!ready) return null;
+  if (loading) return null;
 
   return (
     <>

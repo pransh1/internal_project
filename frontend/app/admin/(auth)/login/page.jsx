@@ -7,88 +7,129 @@ import { useRouter } from "next/navigation";
 export default function AdminLogin() {
   const [email, setEmail] = useState("");
   const [pwd, setPwd] = useState("");
-
   const [showForgot, setShowForgot] = useState(false);
   const [forgotEmail, setForgotEmail] = useState("");
+  const [errors, setErrors] = useState({});
+  const [toast, setToast] = useState("");
 
   const router = useRouter();
 
+  // ---------------- LOGIN ----------------
   const login = async () => {
-    if (!email || !pwd) {
-      alert("All fields are required");
+    const newErrors = {};
+    if (!email) newErrors.email = "Email is required";
+    if (!pwd) newErrors.pwd = "Password is required";
+
+    setErrors(newErrors);
+    if (Object.keys(newErrors).length) return;
+
+    try {
+      const res = await api.post("/admin/login", {
+        email,
+        password: pwd,
+      });
+
+      // ✅ STORE ADMIN INFO ONLY (NO TOKEN)
+      localStorage.setItem("adminData", JSON.stringify(res.data.admin));
+
+      router.push("/admin/dashboard");
+    } catch {
+      setErrors({ form: "Invalid credentials" });
+    }
+  };
+  
+
+  // ---------------- FORGOT PASSWORD ----------------
+  const sendResetLink = async () => {
+    if (!forgotEmail) {
+      setErrors({ forgotEmail: "Email is required" });
       return;
     }
 
     try {
-      const res = await api.post("/admin/login", { email, password: pwd });
-
-      localStorage.setItem("admintoken", res.data.token);
-      localStorage.setItem("adminData", JSON.stringify(res.data.admin));
-
-      router.push("/admin/dashboard");
-    } catch (err) {
-      alert(err.response?.data?.message || "Invalid credentials");
-    }
-  };
-
-  const sendResetLink = async () => {
-    if (!forgotEmail) return alert("Enter your email");
-
-    try {
       await api.post("/admin/forgot-password", { email: forgotEmail });
 
-      alert("Reset link sent to your email!");
+      setToast("Reset link sent to your email");
       setShowForgot(false);
       setForgotEmail("");
+      setErrors({});
+
+      setTimeout(() => setToast(""), 3000);
     } catch (err) {
-      alert(err.response?.data?.message || "Error sending reset link");
+      setErrors({
+        forgotEmail: "Failed to send reset link",
+      });
     }
   };
 
   return (
     <div className="flex items-center justify-center h-screen bg-gray-100">
 
+      {/* TOAST */}
+      {toast && (
+        <div className="fixed top-6 right-6 z-50
+          bg-green-600 text-white
+          px-4 py-2 rounded-lg shadow-lg
+          text-sm animate-fade-in">
+          {toast}
+        </div>
+      )}
+
+      {/* LOGIN CARD */}
       <div className="bg-white p-8 shadow-lg rounded-lg w-96 border border-gray-200">
         <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
 
-        {/* Email */}
+        {errors.form && (
+          <p className="text-red-600 text-sm text-center mb-3">
+            {errors.form}
+          </p>
+        )}
+
+        {/* EMAIL */}
         <input
           type="email"
           placeholder="Email address"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setErrors((p) => ({ ...p, email: "", form: "" }));
+          }}
           className="w-full border border-gray-300 rounded-lg px-4 py-3
-             focus:outline-none focus:ring-2 focus:ring-blue-500
-             transition mb-4"
+            focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
+        {errors.email && (
+          <p className="text-red-500 text-xs mt-1">{errors.email}</p>
+        )}
 
-        {/* Password */}
+        {/* PASSWORD */}
         <input
           type="password"
           placeholder="Password"
           value={pwd}
-          onChange={(e) => setPwd(e.target.value)}
-          className="w-full border border-gray-300 rounded-lg px-4 py-3
-             focus:outline-none focus:ring-2 focus:ring-blue-500
-             transition mb-4"
+          onChange={(e) => {
+            setPwd(e.target.value);
+            setErrors((p) => ({ ...p, pwd: "", form: "" }));
+          }}
+          className="w-full mt-4 border border-gray-300 rounded-lg px-4 py-3
+            focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
+        {errors.pwd && (
+          <p className="text-red-500 text-xs mt-1">{errors.pwd}</p>
+        )}
 
-        {/* Login Button */}
+        {/* LOGIN BUTTON */}
         <div className="flex justify-center mt-6">
           <button
             onClick={login}
             className="w-[260px] bg-blue-600 text-white py-3 rounded-lg
-               font-semibold text-base
-               hover:bg-blue-700 transition"
+              font-semibold hover:bg-blue-700 transition"
           >
             Login
           </button>
         </div>
 
-        {/* Forgot + Register */}
+        {/* FORGOT + REGISTER */}
         <div className="text-center mt-4 text-sm">
-
-          {/* POPUP FORGOT PASSWORD */}
           <span
             className="text-blue-600 hover:underline cursor-pointer"
             onClick={() => setShowForgot(true)}
@@ -98,8 +139,10 @@ export default function AdminLogin() {
 
           <span className="mx-2 text-gray-400">|</span>
 
-          {/* KEEP REGISTER LINK AS IT IS */}
-          <a href="/admin/register" className="text-blue-600 hover:underline">
+          <a
+            href="/admin/register"
+            className="text-blue-600 hover:underline"
+          >
             Register
           </a>
         </div>
@@ -107,8 +150,9 @@ export default function AdminLogin() {
 
       {/* ---------------- FORGOT PASSWORD MODAL ---------------- */}
       {showForgot && (
-        <div className="absolute inset-0 bg-black/40 backdrop-blur-sm flex justify-center items-center">
-          <div className="bg-white w-96 p-6 rounded-lg shadow-xl border relative animate-fadeIn">
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm
+          flex items-center justify-center z-50">
+          <div className="bg-white w-96 p-6 rounded-lg shadow-xl border">
 
             <h3 className="text-xl font-semibold mb-4 text-center">
               Reset Password
@@ -118,43 +162,42 @@ export default function AdminLogin() {
               type="email"
               placeholder="Enter your registered email"
               value={forgotEmail}
-              onChange={(e) => setForgotEmail(e.target.value)}
+              onChange={(e) => {
+                setForgotEmail(e.target.value);
+                setErrors((p) => ({ ...p, forgotEmail: "" }));
+              }}
               className="w-full border border-gray-300 rounded-lg px-4 py-3
-             focus:outline-none focus:ring-2 focus:ring-blue-500
-             transition mb-4"
+                focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
             />
+            {errors.forgotEmail && (
+              <p className="text-red-500 text-xs mt-1">
+                {errors.forgotEmail}
+              </p>
+            )}
 
             <button
               onClick={sendResetLink}
-              className="
-    w-[85%]
-    mx-auto
-    block
-    bg-blue-600 text-white
-    py-3
-    rounded-xl
-    font-semibold
-    text-base
-    tracking-wide
-    hover:bg-blue-700
-    active:scale-[0.98]
-    transition-all
-  "
+              className="w-full mt-4 bg-blue-600 text-white py-3
+                rounded-lg font-semibold hover:bg-blue-700 transition"
             >
               Send Reset Link
             </button>
 
-
-            <p
-              className="text-center mt-4 cursor-pointer text-gray-600 hover:underline"
-              onClick={() => setShowForgot(false)}
+           
+            <button
+              onClick={() => {
+                setShowForgot(false);
+                setErrors({});
+                setForgotEmail("");
+              }}
+              className="w-full mt-3 border border-gray-300 py-2 rounded-lg
+                text-gray-600 hover:bg-gray-100 transition"
             >
               Cancel
-            </p>
+            </button>
           </div>
         </div>
       )}
-
     </div>
   );
 }

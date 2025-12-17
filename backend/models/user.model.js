@@ -57,7 +57,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ""
   },
-  createdAt: { type: Date, default: Date.now }
-});
+  isDeleted: {
+    type: Boolean,
+    default: false
+  },
+  
+},{ timestamps: true });
 
 export default mongoose.model("User", userSchema);

@@ -29,70 +29,22 @@ A full-stack web application for managing employee records, built with **Next.js
 - View personal profile information
 - Access dashboard
 
-## 📁 Project Structure
-
-```
-internal_project/
-├── backend/                 # Express.js API server
-│   ├── constants.js        # Enums for roles, managers, projects, employment types
-│   ├── controllers/        # Business logic
-│   │   ├── admin.controller.js
-│   │   └── user.controller.js
-│   ├── db/
-│   │   └── connect.js      # MongoDB connection
-│   ├── middleware/
-│   │   ├── auth.middleware.js    # JWT authentication
-│   │   └── upload.middleware.js  # Multer file upload
-│   ├── models/
-│   │   ├── admin.model.js
-│   │   └── user.model.js
-│   ├── routes/
-│   │   ├── admin.route.js
-│   │   └── user.route.js
-│   ├── utils/
-│   │   ├── cloudinary.js        # Image upload service
-│   │   ├── generatePassword.js  # Auto password generation
-│   │   └── sendMail.js          # Email service (Nodemailer)
-│   ├── package.json
-│   └── server.js           # Entry point
-│
-└── frontend/               # Next.js 16 application
-    ├── app/
-    │   ├── admin/          # Admin routes
-    │   │   ├── dashboard/
-    │   │   ├── login/
-    │   │   ├── register/
-    │   │   ├── reset-password/
-    │   │   └── users/      # Employee management UI
-    │   ├── globals.css
-    │   ├── layout.js
-    │   └── page.js         # Root redirects to /admin/login
-    ├── components/
-    │   ├── AdminHeader.jsx
-    │   ├── Sidebar.jsx
-    │   └── UserTable.jsx
-    ├── utils/
-    │   ├── axios.js        # API client configuration
-    │   └── constants.js
-    └── package.json
-```
-
 ## 🛠️ Technology Stack
 
 ### Backend
-- **Framework**: Express.js 5.2.1
-- **Database**: MongoDB with Mongoose 9.0.1
-- **Authentication**: JWT (jsonwebtoken 9.0.3)
+- **Framework**: Express.js 
+- **Database**: MongoDB 
+- **Authentication**: JWT (jsonwebtoken )
 - **Password Hashing**: bcryptjs
-- **File Upload**: Multer 2.0.2
-- **Cloud Storage**: Cloudinary 2.8.0
-- **Email Service**: Nodemailer 7.0.11
+- **File Upload**: Multer 
+- **Cloud Storage**: Cloudinary 
+- **Email Service**: Brevo
 - **Environment**: Node.js with ES Modules
 
 ### Frontend
-- **Framework**: Next.js 16.0.10 (React 19.2.1)
-- **Styling**: Tailwind CSS 4
-- **HTTP Client**: Axios 1.13.2
+- **Framework**: Next.js 
+- **Styling**: TailwindCSS 
+- **HTTP Client**: Axios 
 - **Icons**: Lucide React, React Icons
 - **UI Components**: Custom components with Tailwind
 
@@ -101,7 +53,7 @@ internal_project/
 - **Node.js**: v18+ recommended
 - **MongoDB**: Local instance or MongoDB Atlas
 - **Cloudinary Account**: For image storage
-- **SMTP Server**: For sending emails (Gmail, SendGrid, etc.)
+- **BREVO API KEY**: For sending emails (Gmail, SendGrid, etc.)
 
 ## ⚙️ Installation & Setup
 
@@ -138,10 +90,9 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 
 # Email Configuration (Example: Gmail)
-EMAIL_HOST=smtp.gmail.com
-EMAIL_PORT=587
-EMAIL_USER=your_email@gmail.com
-EMAIL_PASS=your_app_password
+BREVO_SENDER_NAME=your_name
+BREVO_SENDER_EMAIL=your_email@email.com
+BREVO_API_KEY=your_api_key
 
 # Frontend URL (for password reset links)
 FRONTEND_URL=your_frontend_url

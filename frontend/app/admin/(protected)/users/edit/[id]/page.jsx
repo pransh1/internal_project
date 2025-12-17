@@ -16,6 +16,7 @@ export default function EditUserPage() {
 
   const [form, setForm] = useState(null);
   const [photo, setPhoto] = useState(null);
+  const [toast, setToast] = useState("")
   const [preview, setPreview] = useState("/default-user.png");
 
   // ---------------- Load User Details ------------------
@@ -37,7 +38,7 @@ export default function EditUserPage() {
         }
       } catch (err) {
         console.log(err);
-        alert("Failed to load user");
+        setToast("Failed to load user");
       }
     };
 
@@ -84,8 +85,10 @@ export default function EditUserPage() {
         });
       }
 
-      alert("User updated successfully!");
-      router.push("/admin/users");
+      setToast("User updated successfully!");
+      setTimeout(() => {
+        router.push("/admin/users");
+      }, 1200);
     } catch (err) {
       console.log(err);
       alert("Failed to update user");
@@ -96,6 +99,12 @@ export default function EditUserPage() {
 
   return (
     <div className="max-w-6xl mx-auto bg-white rounded-xl shadow p-8">
+      {/* TOAST */}
+      {toast && (
+        <div className="fixed top-6 right-6 z-50 bg-green-600 text-white px-4 py-2 rounded-lg shadow">
+          {toast}
+        </div>
+      )}
 
       <h1 className="text-3xl font-bold mb-8">Edit User</h1>
 
